@@ -90,27 +90,76 @@ def enter_names_window(num_players):
     names_window = tk.Tk()
     names_window.title("Enter Player Names")
 
+    # Set the size of the window
+    window_width = 300
+    window_height = 400
+    window_position_x = (names_window.winfo_screenwidth() - window_width) // 2
+    window_position_y = (names_window.winfo_screenheight() - window_height) // 2
+
+    names_window.geometry(f"{window_width}x{window_height}+{window_position_x}+{window_position_y}")
+
+
+
+    # Create a frame inside the canvas to hold the widgets
+    frame = tk.Frame(names_window)
+    frame.pack(expand=True, fill='both')
+
+
+    # Create a canvas with a scrollbar
+    canvas = tk.Canvas(frame)
+    scrollbar = tk.Scrollbar(frame, orient="vertical", command=canvas.yview)
+    canvas.configure(yscrollcommand=scrollbar.set)
+
+    # Pack the canvas and scrollbar
+    scrollbar.pack(side="right", fill="y")
+    canvas.pack(side="left", fill="both", expand=True)
+
+    # Create a frame inside the canvas to hold the widgets
+    inner_frame = tk.Frame(canvas)
+    canvas.create_window((0,0), window=inner_frame, anchor="nw")
+
+
     # Label and Entry for each player
     player_labels = []
     player_entries = []
 
+    # Title
+    txt = "Players Names"
+    txt_len = len(txt)+6
+    title_label = tk.Label(inner_frame, text=f"{txt:^{txt_len}}", font=("Helvetica", 16, "bold"))
+    title_label.pack(pady=10)
+
     for i in range(1, num_players + 1):
 
-        label = tk.Label(names_window, text=f"Enter name for Player {i}:")
-        entry = tk.Entry(names_window)
+        label = tk.Label(inner_frame, text=f"Enter name for Player {i}:")
+        entry = tk.Entry(inner_frame)
 
         player_labels.append(label)
         player_entries.append(entry)
 
-        label.pack(pady=5)
-        entry.pack(pady=5)
+        label.pack(pady=5, anchor= "center")
+        entry.pack(pady=5, anchor= "center")
 
     # Button to save names and proceed to randomization
-    save_button = tk.Button(names_window, text="Save Names", command=lambda: randomization_window([entry.get() for entry in player_entries]))
-    save_button.pack(pady=20)
+    save_button = tk.Button(inner_frame, text="Save Names", command=lambda: randomization_window([entry.get() for entry in player_entries]))
+    save_button.pack(pady=20, side=tk.BOTTOM)
+   
+    # Configure the canvas to update scroll region
+    inner_frame.update_idletasks()
+    canvas.config(scrollregion=canvas.bbox("all"))
+
+    # Bind the canvas to the scrollbar
+    canvas.bind("<Configure>", lambda event, canvas=canvas: canvas.configure(scrollregion=canvas.bbox("all")))
+
 
     # Start the GUI event loop for this window
     names_window.mainloop()
+
+enter_names_window(8)
+
+
+
+
 
 
 def randomization_window(player_names):
@@ -172,5 +221,5 @@ def main_menu():
 
 
 # Calling the main menu func to run the app
-main_menu()
+# main_menu()
 
