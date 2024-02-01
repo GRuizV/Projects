@@ -44,35 +44,6 @@ def randomize_players(player_names):
 
 
 
-def num_players_window():
-    
-    """
-    Number of Players Window:
-
-        - After clicking the "Start Match" button, it will close the main menu window.
-        - Will open a new window asking for the number of players participating.
-        - Will include an entry field for the user to input the number.
-        - Will Provide a button to proceed to the next step.
-    """
-
-    # Create the number of players window
-    num_players_window = tk.Tk()
-    num_players_window.title("Enter Number of Players")
-
-    # Label and Entry for the number of players
-    label = tk.Label(num_players_window, text="Enter the number of players:")
-    label.pack(pady=10)
-
-    entry = tk.Entry(num_players_window)
-    entry.pack(pady=10)
-
-    # Button to proceed to entering names
-    proceed_button = tk.Button(num_players_window, text="Proceed", command=lambda: enter_names_window(int(entry.get())))
-    proceed_button.pack(pady=20)
-
-    # Start the GUI event loop for this window
-    num_players_window.mainloop()
-
 
 def enter_names_window(num_players):
    
@@ -95,6 +66,7 @@ def enter_names_window(num_players):
         names_window.grid_rowconfigure(i, weight=1)
         names_window.grid_columnconfigure(0, weight=1)
         names_window.grid_columnconfigure(1, weight=1)
+
 
     # Title Label
     title_label = tk.Label(names_window, text="Players Names", font=("Helvetica", 16, "bold"))
@@ -143,6 +115,58 @@ def enter_names_window(num_players):
 
 
 
+def num_players_window():
+    
+    """
+    Number of Players Window:
+
+        - After clicking the "Start Match" button, it will close the main menu window.
+        - Will open a new window asking for the number of players participating.
+        - Will include an entry field for the user to input the number.
+        - Will Provide a button to proceed to the next step.
+    """
+
+    # Create the number of players window
+    num_players_window = tk.Tk()
+    num_players_window.title("Number of Players")
+    
+    # Set the size and position of the window
+    window_width = 250
+    window_height = 180
+    window_position_x = (num_players_window.winfo_screenwidth() - window_width) // 2
+    window_position_y = (num_players_window.winfo_screenheight() - window_height) // 2
+
+    num_players_window.geometry(f"{window_width}x{window_height}+{window_position_x}+{window_position_y}")
+
+
+    # Title
+    txt = "Number of Players"
+    txt_len = len(txt)+6
+    title_label = tk.Label(num_players_window, text=f"{txt:^{txt_len}}", font=("Helvetica", 14))
+    title_label.pack(pady=10)
+
+    # Entries label for the number of players
+    label = tk.Label(num_players_window, text="Please enter the number of players:", font=("Helvetica", 10))
+    label.pack(pady=0)
+
+    # Input Warning label
+    warning_label = tk.Label(num_players_window, text="Be careful, the input could only be an even number!",  font=("Helvetica", 7, 'italic'))
+    warning_label.pack(pady=0)
+
+    entry = tk.Entry(num_players_window)
+    entry.pack(pady=10)
+
+    # Button to proceed to entering names
+    proceed_button = tk.Button(num_players_window, text="Proceed", command=lambda: enter_names_window(int(entry.get())))
+    proceed_button.pack(pady=10)
+
+    # Start the GUI event loop for this window
+    num_players_window.mainloop()
+
+
+num_players_window()
+
+
 
 def randomization_window(player_names):
     
@@ -183,10 +207,19 @@ def main_menu():
     menu_window = tk.Tk()
     menu_window.title("Versus Match Randomizer")
 
+    # Set the size and position of the window
+    window_width = 350
+    window_height = 190
+    window_position_x = (menu_window.winfo_screenwidth() - window_width) // 2
+    window_position_y = (menu_window.winfo_screenheight() - window_height) // 4
+
+    menu_window.geometry(f"{window_width}x{window_height}+{window_position_x}+{window_position_y}")
+
+
     # Title
     txt = "Versus Match Randomizer"
     txt_len = len(txt)+6
-    title_label = tk.Label(menu_window, text=f"{txt:^{txt_len}}", font=("Helvetica", 16, "bold"))
+    title_label = tk.Label(menu_window, text=f"{txt:^{txt_len}}", font=("Helvetica", 18, "bold"))
     title_label.pack(pady=10)
 
     # Description
@@ -194,7 +227,7 @@ def main_menu():
     description_label.pack(pady=10)
 
     # Start Match button
-    start_button = tk.Button(menu_window, text="Start Match", command=lambda: enter_names_window(10), padx=10, pady=5)  # You can change 4 to any default number of players
+    start_button = tk.Button(menu_window, text="Start!", command=lambda: num_players_window(), padx=10, pady=5)  # You can change 4 to any default number of players
     
     start_button.pack(pady=20)
 
@@ -203,5 +236,5 @@ def main_menu():
 
 
 # Calling the main menu func to run the app
-main_menu()
+# main_menu()
 
