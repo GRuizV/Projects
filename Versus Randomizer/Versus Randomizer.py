@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 
+# Logic Functions
 
 def randomize_players(player_names):
 
@@ -31,6 +32,7 @@ def validate_input(input_str):
 
 
 
+# Window Functions
 
 def display_pairings(pairings):
     
@@ -40,7 +42,6 @@ def display_pairings(pairings):
         - Will simply show the results
     """
     
-
     # Create the window for displaying pairings
     pairings_window = tk.Tk()
     pairings_window.title("Final Pairings")
@@ -73,6 +74,14 @@ def enter_names_window(num_players):
     # Create the enter names window
     names_window = tk.Tk()
     names_window.title("Enter Player Names")
+
+    # Set the size and position of the window
+    window_width = 300
+    window_height = 400
+    window_position_x = (names_window.winfo_screenwidth() - window_width) // 2
+    window_position_y = (names_window.winfo_screenheight() - window_height) // 3
+
+    names_window.geometry(f"{window_width}x{window_height}+{window_position_x}+{window_position_y}")
 
     # Set row and column weights to distribute extra space
     for i in range(4):  # For title, entries, scrollbar, and button
@@ -113,8 +122,11 @@ def enter_names_window(num_players):
         entry.grid(row=i, column=1, pady=5, padx=(0, 10), sticky="w")
 
     # Save Names Button
-    save_button = tk.Button(names_window, text="Save Names", command = lambda: randomization_window([entry.get() for entry in player_entries]))
+    save_button = tk.Button(names_window, text="Randomize Matches", command = lambda: randomize_players([entry.get() for entry in player_entries]))
     save_button.grid(row=3, column=0, columnspan=2, pady=20)
+
+
+
 
     # Configure the canvas to update scroll region
     names_window.update_idletasks()
@@ -123,8 +135,15 @@ def enter_names_window(num_players):
     # Bind the canvas to the scrollbar
     canvas.bind("<Configure>", lambda event, canvas=canvas: canvas.configure(scrollregion=canvas.bbox("all")))
 
+
+
+
+
     # Start the GUI event loop for this window
     names_window.mainloop()
+
+
+enter_names_window(3)
 
 
 
@@ -191,31 +210,7 @@ def num_players_window():
     num_players_window.mainloop()
 
 
-num_players_window()
 
-
-
-def randomization_window(player_names):
-    
-    """
-    Randomization Window:
-
-        - Will Perform the randomization logic.
-        - Will Open a new window with entry fields for each player's name.
-        - Will Display the match outcomes.
-        - Will Include a button to close the window or start over.
-    """
-
-    # Create the randomization window
-    randomization_window = tk.Tk()
-    randomization_window.title("Randomization Results")
-
-    # Button to start randomization
-    randomize_button = tk.Button(randomization_window, text="Randomize Players", command=lambda: randomize_players(player_names))
-    randomize_button.pack(pady=20)
-
-    # Start the GUI event loop for this window
-    randomization_window.mainloop()
 
 
 
