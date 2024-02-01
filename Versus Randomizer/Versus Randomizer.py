@@ -90,74 +90,56 @@ def enter_names_window(num_players):
     names_window = tk.Tk()
     names_window.title("Enter Player Names")
 
-    # Set the size of the window
-    window_width = 300
-    window_height = 400
-    window_position_x = (names_window.winfo_screenwidth() - window_width) // 2
-    window_position_y = (names_window.winfo_screenheight() - window_height) // 2
+    # Set row and column weights to distribute extra space
+    for i in range(4):  # For title, entries, scrollbar, and button
+        names_window.grid_rowconfigure(i, weight=1)
+        names_window.grid_columnconfigure(0, weight=1)
+        names_window.grid_columnconfigure(1, weight=1)
 
-    names_window.geometry(f"{window_width}x{window_height}+{window_position_x}+{window_position_y}")
-
-
-
-    # Create a frame inside the canvas to hold the widgets
-    frame = tk.Frame(names_window)
-    frame.pack(expand=True, fill='both')
-
+    # Title Label
+    title_label = tk.Label(names_window, text="Players Names", font=("Helvetica", 16, "bold"))
+    title_label.grid(row=0, column=0, columnspan=2, pady=10)
 
     # Create a canvas with a scrollbar
-    canvas = tk.Canvas(frame)
-    scrollbar = tk.Scrollbar(frame, orient="vertical", command=canvas.yview)
+    canvas = tk.Canvas(names_window)
+    scrollbar = tk.Scrollbar(names_window, orient="vertical", command=canvas.yview)
     canvas.configure(yscrollcommand=scrollbar.set)
-
-    # Pack the canvas and scrollbar
-    scrollbar.pack(side="right", fill="y")
-    canvas.pack(side="left", fill="both", expand=True)
+    
+    # Grid the canvas and scrollbar
+    canvas.grid(row=1, column=1, sticky="nsew")
+    scrollbar.grid(row=1, column=2, sticky="ns")
 
     # Create a frame inside the canvas to hold the widgets
     inner_frame = tk.Frame(canvas)
-    canvas.create_window((0,0), window=inner_frame, anchor="nw")
+    canvas.create_window((0, 0), window=inner_frame, anchor="nw")
 
-
-    # Label and Entry for each player
+    # Player Labels and Entries
     player_labels = []
     player_entries = []
 
-    # Title
-    txt = "Players Names"
-    txt_len = len(txt)+6
-    title_label = tk.Label(inner_frame, text=f"{txt:^{txt_len}}", font=("Helvetica", 16, "bold"))
-    title_label.pack(pady=10)
-
     for i in range(1, num_players + 1):
-
         label = tk.Label(inner_frame, text=f"Enter name for Player {i}:")
         entry = tk.Entry(inner_frame)
 
         player_labels.append(label)
         player_entries.append(entry)
 
-        label.pack(pady=5, anchor= "center")
-        entry.pack(pady=5, anchor= "center")
+        label.grid(row=i, column=0, pady=5, sticky="e")
+        entry.grid(row=i, column=1, pady=5, padx=(0, 10), sticky="w")
 
-    # Button to save names and proceed to randomization
-    save_button = tk.Button(inner_frame, text="Save Names", command=lambda: randomization_window([entry.get() for entry in player_entries]))
-    save_button.pack(pady=20, side=tk.BOTTOM)
-   
+    # Save Names Button
+    save_button = tk.Button(names_window, text="Save Names", command = lambda: randomization_window([entry.get() for entry in player_entries]))
+    save_button.grid(row=3, column=0, columnspan=2, pady=20)
+
     # Configure the canvas to update scroll region
-    inner_frame.update_idletasks()
+    names_window.update_idletasks()
     canvas.config(scrollregion=canvas.bbox("all"))
 
     # Bind the canvas to the scrollbar
     canvas.bind("<Configure>", lambda event, canvas=canvas: canvas.configure(scrollregion=canvas.bbox("all")))
 
-
     # Start the GUI event loop for this window
     names_window.mainloop()
-
-enter_names_window(8)
-
-
 
 
 
@@ -212,7 +194,7 @@ def main_menu():
     description_label.pack(pady=10)
 
     # Start Match button
-    start_button = tk.Button(menu_window, text="Start Match", command=lambda: enter_names_window(4), padx=10, pady=5)  # You can change 4 to any default number of players
+    start_button = tk.Button(menu_window, text="Start Match", command=lambda: enter_names_window(10), padx=10, pady=5)  # You can change 4 to any default number of players
     
     start_button.pack(pady=20)
 
@@ -221,5 +203,5 @@ def main_menu():
 
 
 # Calling the main menu func to run the app
-# main_menu()
+main_menu()
 
