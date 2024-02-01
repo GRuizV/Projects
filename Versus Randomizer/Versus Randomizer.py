@@ -1,6 +1,33 @@
 import random
 import time
 import tkinter as tk
+from tkinter import messagebox
+
+
+
+def randomize_players(player_names):
+
+    """
+    This is simply the randomizing logic
+    """
+
+    random.shuffle(player_names)
+    pairings = [(player_names[i], player_names[i + 1]) for i in range(0, len(player_names), 2)]
+    display_pairings(pairings)
+
+def validate_input(input_str):
+
+    try:
+        num_players = int(input_str)
+
+        if num_players % 2 == 0 and num_players > 0:
+            return True, num_players
+        
+        else:
+            return False, None
+        
+    except ValueError:
+        return False, None
 
 
 
@@ -29,20 +56,6 @@ def display_pairings(pairings):
 
     # Start the GUI event loop for this window
     pairings_window.mainloop()
-
-
-def randomize_players(player_names):
-
-    """
-    This is simply the randomizing logic
-    """
-
-    random.shuffle(player_names)
-    pairings = [(player_names[i], player_names[i + 1]) for i in range(0, len(player_names), 2)]
-    display_pairings(pairings)
-
-
-
 
 
 def enter_names_window(num_players):
@@ -156,8 +169,22 @@ def num_players_window():
     entry = tk.Entry(num_players_window)
     entry.pack(pady=10)
 
+    def proceed_button_callback():
+
+        input_str = entry.get()
+        is_valid, num_players = validate_input(input_str)
+
+        if is_valid:
+            num_players_window.destroy()
+            enter_names_window(num_players)
+
+        else:
+            messagebox.showerror("Invalid Input", "Please enter a valid even positive number.")
+
+
+
     # Button to proceed to entering names
-    proceed_button = tk.Button(num_players_window, text="Proceed", command=lambda: enter_names_window(int(entry.get())))
+    proceed_button = tk.Button(num_players_window, text="Proceed", command=lambda: proceed_button_callback())
     proceed_button.pack(pady=10)
 
     # Start the GUI event loop for this window
@@ -227,12 +254,13 @@ def main_menu():
     description_label.pack(pady=10)
 
     # Start Match button
-    start_button = tk.Button(menu_window, text="Start!", command=lambda: num_players_window(), padx=10, pady=5)  # You can change 4 to any default number of players
-    
+    start_button = tk.Button(menu_window, text="Start!", command=lambda: num_players_window(), padx=10, pady=5)
     start_button.pack(pady=20)
+
 
     # Starting the GUI event loop
     menu_window.mainloop()
+
 
 
 # Calling the main menu func to run the app
