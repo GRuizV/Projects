@@ -68,15 +68,56 @@ def display_pairings(pairings):
     pairings_window.mainloop()
 
 
-# Dummy input
-player_names = ['A', 'B', 'C', 'D']
-pairings = [(player_names[i], player_names[i + 1]) for i in range(0, len(player_names), 2)]
+# # Dummy input
+# player_names = ['A', 'B', 'C', 'D']
+# pairings = [(player_names[i], player_names[i + 1]) for i in range(0, len(player_names), 2)]
 
-# display_pairings(pairings)
-
-
+# # display_pairings(pairings)
 
 
+
+def countdown_window(player_names):
+
+    countdown = 3
+    countdown_window = tk.Tk()
+    countdown_window.title("Countdown")
+
+    # Set the size and position of the window
+    window_width = 200
+    window_height = 150
+    window_position_x = (countdown_window.winfo_screenwidth() - window_width) // 2
+    window_position_y = (countdown_window.winfo_screenheight() - window_height) // 3
+
+    countdown_window.geometry(f"{window_width}x{window_height}+{window_position_x}+{window_position_y}")
+
+    # Countdown label
+    countdown_label = tk.Label(countdown_window, font=("Helvetica", 24))
+    countdown_label.pack(pady=20)
+
+
+    # Function to update the countdown label
+    def update_countdown():
+
+        nonlocal countdown
+        nonlocal player_names
+
+        if countdown >= 1:
+
+            countdown_label.config(text=str(countdown))
+            countdown -= 1
+            countdown_label.after(1000, update_countdown)
+
+        else:
+
+            countdown_window.destroy()            
+            randomize_players(player_names)
+
+
+    # Start the countdown
+    update_countdown()
+
+    # Start the GUI event loop for this window
+    countdown_window.mainloop()
 
 
 def enter_names_window(num_players):
@@ -143,15 +184,15 @@ def enter_names_window(num_players):
     
 
     # Function to pass to randomize matches and close the window
-    def proceed_to_randomize():
+    def proceed_to_countdown():
 
         players_names = [entry.get() for entry in player_entries]
         names_window.destroy()
-        randomize_players(players_names)
+        countdown_window(players_names)
 
 
     # Save Names Button
-    save_button = tk.Button(names_window, text="Randomize Matches", command = lambda: proceed_to_randomize())
+    save_button = tk.Button(names_window, text="Randomize Matches", command = lambda: proceed_to_countdown())
     save_button.grid(row=3, column=0, columnspan=2, pady=20)
 
 
@@ -165,6 +206,11 @@ def enter_names_window(num_players):
 
     # Start the GUI event loop for this window
     names_window.mainloop()
+
+
+
+
+
 
 
 def num_players_window():
@@ -231,6 +277,8 @@ def num_players_window():
     num_players_window.mainloop()
 
 
+
+
 #   Main Menu Windown
 def main_menu():
 
@@ -280,5 +328,5 @@ def main_menu():
 
 
 # Calling the main menu func to run the app
-# main_menu()
+main_menu()
 
