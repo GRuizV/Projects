@@ -46,8 +46,17 @@ def display_pairings(pairings):
     pairings_window = tk.Tk()
     pairings_window.title("Final Pairings")
 
+    # Set the size and position of the window
+    window_width = 250
+    window_height = 180
+    window_position_x = (pairings_window.winfo_screenwidth() - window_width) // 2
+    window_position_y = (pairings_window.winfo_screenheight() - window_height) // 2
+
+    pairings_window.geometry(f"{window_width}x{window_height}+{window_position_x}+{window_position_y}")
+
+
     # Label for pairings
-    label = tk.Label(pairings_window, text="Final Pairings", font=("Helvetica", 16, "bold"))
+    label = tk.Label(pairings_window, text="Final Pairings", font=("Helvetica", 14))
     label.pack(pady=10)
 
     # Display pairings
@@ -57,6 +66,17 @@ def display_pairings(pairings):
 
     # Start the GUI event loop for this window
     pairings_window.mainloop()
+
+
+# Dummy input
+player_names = ['A', 'B', 'C', 'D']
+pairings = [(player_names[i], player_names[i + 1]) for i in range(0, len(player_names), 2)]
+
+# display_pairings(pairings)
+
+
+
+
 
 
 def enter_names_window(num_players):
@@ -120,12 +140,19 @@ def enter_names_window(num_players):
 
         label.grid(row=i, column=0, pady=5, sticky="e")
         entry.grid(row=i, column=1, pady=5, padx=(0, 10), sticky="w")
+    
+
+    # Function to pass to randomize matches and close the window
+    def proceed_to_randomize():
+
+        players_names = [entry.get() for entry in player_entries]
+        names_window.destroy()
+        randomize_players(players_names)
+
 
     # Save Names Button
-    save_button = tk.Button(names_window, text="Randomize Matches", command = lambda: randomize_players([entry.get() for entry in player_entries]))
+    save_button = tk.Button(names_window, text="Randomize Matches", command = lambda: proceed_to_randomize())
     save_button.grid(row=3, column=0, columnspan=2, pady=20)
-
-
 
 
     # Configure the canvas to update scroll region
@@ -136,15 +163,8 @@ def enter_names_window(num_players):
     canvas.bind("<Configure>", lambda event, canvas=canvas: canvas.configure(scrollregion=canvas.bbox("all")))
 
 
-
-
-
     # Start the GUI event loop for this window
     names_window.mainloop()
-
-
-enter_names_window(3)
-
 
 
 def num_players_window():
@@ -188,7 +208,8 @@ def num_players_window():
     entry = tk.Entry(num_players_window)
     entry.pack(pady=10)
 
-    def proceed_button_callback():
+    # Function to pass to enter names and close the window
+    def proceed_to_enter_names():
 
         input_str = entry.get()
         is_valid, num_players = validate_input(input_str)
@@ -203,18 +224,14 @@ def num_players_window():
 
 
     # Button to proceed to entering names
-    proceed_button = tk.Button(num_players_window, text="Proceed", command=lambda: proceed_button_callback())
+    proceed_button = tk.Button(num_players_window, text="Proceed", command=lambda: proceed_to_enter_names())
     proceed_button.pack(pady=10)
 
     # Start the GUI event loop for this window
     num_players_window.mainloop()
 
 
-
-
-
-
-
+#   Main Menu Windown
 def main_menu():
 
     """
@@ -237,6 +254,10 @@ def main_menu():
 
     menu_window.geometry(f"{window_width}x{window_height}+{window_position_x}+{window_position_y}")
 
+    # Function to pass to enter number of players and close the window
+    def proceed_to_num_players():
+        menu_window.destroy()  # Close the menu window
+        num_players_window()   # Open the number of players window
 
     # Title
     txt = "Versus Match Randomizer"
@@ -249,7 +270,7 @@ def main_menu():
     description_label.pack(pady=10)
 
     # Start Match button
-    start_button = tk.Button(menu_window, text="Start!", command=lambda: num_players_window(), padx=10, pady=5)
+    start_button = tk.Button(menu_window, text="Start!", command=lambda: proceed_to_num_players(), padx=10, pady=5)
     start_button.pack(pady=20)
 
 
