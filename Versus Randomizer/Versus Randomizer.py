@@ -1,8 +1,6 @@
 import random
 import tkinter as tk
 
-
-
 # Logic Functions
 
 def randomize_players(player_names):
@@ -40,12 +38,12 @@ def display_pairings(pairings):
         - Will simply show the results
     """
     
-    # Create the window for displaying pairings
+    # Create the display pairings window
     pairings_window = tk.Tk()
     pairings_window.title("Final Pairings")
 
     # Set the size and position of the window
-    window_width = 250
+    window_width = 220
     window_height = 400
     window_position_x = (pairings_window.winfo_screenwidth() - window_width) // 2
     window_position_y = (pairings_window.winfo_screenheight() - window_height) // 3
@@ -58,10 +56,9 @@ def display_pairings(pairings):
         pairings_window.grid_columnconfigure(0, weight=1)
         pairings_window.grid_columnconfigure(1, weight=1)
 
-
     # Title Label
-    label = tk.Label(pairings_window, text="Final Pairings", font=("Helvetica", 16))
-    label.grid(row=0, column=0, columnspan=2, pady=10)
+    title_label = tk.Label(pairings_window, text="Final Pairings", font=("Helvetica", 16))
+    title_label.grid(row=0, column=0, columnspan=2, pady=10)
 
     # Create a canvas with a scrollbar
     canvas = tk.Canvas(pairings_window)
@@ -76,46 +73,26 @@ def display_pairings(pairings):
     inner_frame = tk.Frame(canvas)
     canvas.create_window((0, 0), window=inner_frame, anchor="nw")
 
+    # Display pairings
+    for i, pairing in enumerate(pairings, start=1):
+        pair_label = tk.Label(inner_frame, text=f"{pairing[0]} vs {pairing[1]}", font=("Helvetica", 10))
+        pair_label.grid(row=i, column=0, pady=1, padx=(0, 10), sticky='w')
 
-    for i in range(len(pairings)):
-
-        # name1 = pairings[i][0]
-        # name2 = pairings[i][1]
-
-        pair_label = tk.Label(inner_frame, text=f"{pairings[i][0]}  vs  {pairings[i][1]}", font=("Helvetica", 10))
-        pair_label.grid(row=i, column=0, pady=0, padx=(0,10), sticky='ew')
-
-
-    # Function to close the process
+    # Function to close the window
     def close_window():
         pairings_window.destroy()
 
     # Close Window Button
-    close_button = tk.Button(pairings_window, text="  Close  ", command = lambda: close_window())
+    close_button = tk.Button(pairings_window, text="  Close  ", command=close_window)
     close_button.grid(row=3, column=0, columnspan=2, pady=20)
-
 
     # Configure the canvas to update scroll region
     pairings_window.update_idletasks()
     canvas.config(scrollregion=canvas.bbox("all"))
-
-    # Bind the canvas to the scrollbar
     canvas.bind("<Configure>", lambda event, canvas=canvas: canvas.configure(scrollregion=canvas.bbox("all")))
-
-
 
     # Start the GUI event loop for this window
     pairings_window.mainloop()
-
-
-# # Dummy input
-# string = 'ABCDEFGHIJKLMNOPQRSTUVWXABCDEFGHIJ'
-# player_names = [char for char in string]
-# pairings = [(player_names[i], player_names[i + 1]) for i in range(0, len(player_names), 2)]
-
-# display_pairings(pairings)
-
-
 
 def countdown_window(player_names):
 
@@ -166,7 +143,6 @@ def countdown_window(player_names):
 
     # Start the GUI event loop for this window
     countdown_window.mainloop()
-
 
 def enter_names_window(num_players):
    
@@ -254,8 +230,6 @@ def enter_names_window(num_players):
     # Start the GUI event loop for this window
     names_window.mainloop()
 
-# enter_names_window(4)
-
 def num_players_window():
     
     """
@@ -317,7 +291,6 @@ def num_players_window():
 
     # Start the GUI event loop for this window
     num_players_window.mainloop()
-
 
 #   Main Menu Windown
 def main_menu():
