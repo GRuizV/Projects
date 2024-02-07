@@ -1,4 +1,7 @@
 import tkinter as tk
+import tkinter.ttk as ttk
+from tkinter.constants import *
+from Scrollbar import *
 
 
 def base_display_pairings(pairings):
@@ -43,16 +46,12 @@ def base_display_pairings(pairings):
     # Start the GUI event loop for this window
     pairings_window.mainloop()
 
-
 # Dummy input
 string = 'ABCDEFGHIJKLMNOPQRSTUVWXABCDEFGHIJ'
 player_names = [char for char in string]
 pairings = [(player_names[i], player_names[i + 1]) for i in range(0, len(player_names), 2)]
 
 # base_display_pairings(pairings)
-
-
-
 
 
 def grid_display_pairings(pairings):
@@ -129,19 +128,12 @@ def grid_display_pairings(pairings):
     # Start the GUI event loop for this window
     pairings_window.mainloop()
 
-
 # Dummy input
 string = 'ABCDEFGHIJKLMNOPQRSTUVWXABCDEFGHIJ'
 player_names = [char for char in string]
 pairings = [(player_names[i], player_names[i + 1]) for i in range(0, len(player_names), 2)]
 
 # grid_display_pairings(pairings)
-
-
-
-
-
-
 
 
 
@@ -157,7 +149,7 @@ def edited_display_pairings(pairings):
     pairings_window.title("Final Pairings")
 
     # Set the size and position of the window
-    window_width = 300
+    window_width = 220
     window_height = 400
     window_position_x = (pairings_window.winfo_screenwidth() - window_width) // 2
     window_position_y = (pairings_window.winfo_screenheight() - window_height) // 3
@@ -171,7 +163,7 @@ def edited_display_pairings(pairings):
         pairings_window.grid_columnconfigure(1, weight=1)
 
     # Title Label
-    title_label = tk.Label(pairings_window, text="Final Pairings", font=("Helvetica", 16, "bold"))
+    title_label = tk.Label(pairings_window, text="Final Pairings", font=("Helvetica", 16))
     title_label.grid(row=0, column=0, columnspan=2, pady=10)
 
     # Create a canvas with a scrollbar
@@ -190,7 +182,7 @@ def edited_display_pairings(pairings):
     # Display pairings
     for i, pairing in enumerate(pairings, start=1):
         pair_label = tk.Label(inner_frame, text=f"{pairing[0]} vs {pairing[1]}", font=("Helvetica", 10))
-        pair_label.grid(row=i, column=0, pady=1, sticky="w")
+        pair_label.grid(row=i, column=0, pady=1, padx=(0, 10), sticky='w')
 
     # Function to close the window
     def close_window():
@@ -216,3 +208,4 @@ player_names = [char for char in string]
 pairings = [(player_names[i], player_names[i + 1]) for i in range(0, len(player_names), 2)]
 
 edited_display_pairings(pairings)
+
