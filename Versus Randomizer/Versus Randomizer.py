@@ -1,5 +1,6 @@
 import random
 import tkinter as tk
+from tkinter import messagebox
 
 # Logic Functions
 
@@ -282,7 +283,7 @@ def num_players_window():
             enter_names_window(num_players)
 
         else:
-            tk.messagebox.showerror("Invalid Input", "Please enter a valid even positive number.")
+            messagebox.showerror("Invalid Input", "Please enter a valid even positive number.")
    
 
     # Button to proceed to entering names
