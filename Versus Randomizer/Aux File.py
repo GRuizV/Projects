@@ -152,40 +152,62 @@ def edited_display_pairings(pairings):
         - Will simply show the results
     """
     
-    # Create the window for displaying pairings
+    # Create the display pairings window
     pairings_window = tk.Tk()
     pairings_window.title("Final Pairings")
 
     # Set the size and position of the window
-    window_width = 250
+    window_width = 300
     window_height = 400
     window_position_x = (pairings_window.winfo_screenwidth() - window_width) // 2
     window_position_y = (pairings_window.winfo_screenheight() - window_height) // 3
 
     pairings_window.geometry(f"{window_width}x{window_height}+{window_position_x}+{window_position_y}")
 
+    # Set row and column weights to distribute extra space
+    for i in range(4):  # For title, pairings, scrollbar, and button
+        pairings_window.grid_rowconfigure(i, weight=1)
+        pairings_window.grid_columnconfigure(0, weight=1)
+        pairings_window.grid_columnconfigure(1, weight=1)
 
     # Title Label
-    label = tk.Label(pairings_window, text="Final Pairings", font=("Helvetica", 16))
-    label.pack(pady=10)
+    title_label = tk.Label(pairings_window, text="Final Pairings", font=("Helvetica", 16, "bold"))
+    title_label.grid(row=0, column=0, columnspan=2, pady=10)
 
-    for i in range(len(pairings)):
+    # Create a canvas with a scrollbar
+    canvas = tk.Canvas(pairings_window)
+    scrollbar = tk.Scrollbar(pairings_window, orient="vertical", command=canvas.yview)
+    canvas.configure(yscrollcommand=scrollbar.set)
 
-        pair_label = tk.Label(pairings_window, text=f"{pairings[i][0]}  vs  {pairings[i][1]}", font=("Helvetica", 10))
-        pair_label.pack(pady=0)
+    # Grid the canvas and scrollbar
+    canvas.grid(row=1, column=1, sticky="nsew")
+    scrollbar.grid(row=1, column=2, sticky="ns")
 
+    # Create a frame inside the canvas to hold the widgets
+    inner_frame = tk.Frame(canvas)
+    canvas.create_window((0, 0), window=inner_frame, anchor="nw")
 
-    # Function to close the process
+    # Display pairings
+    for i, pairing in enumerate(pairings, start=1):
+        pair_label = tk.Label(inner_frame, text=f"{pairing[0]} vs {pairing[1]}", font=("Helvetica", 10))
+        pair_label.grid(row=i, column=0, pady=1, sticky="w")
+
+    # Function to close the window
     def close_window():
         pairings_window.destroy()
 
     # Close Window Button
-    close_button = tk.Button(pairings_window, text="  Close  ", command = lambda: close_window())
-    close_button.pack(pady=10)
+    close_button = tk.Button(pairings_window, text="  Close  ", command=close_window)
+    close_button.grid(row=3, column=0, columnspan=2, pady=20)
 
+    # Configure the canvas to update scroll region
+    pairings_window.update_idletasks()
+    canvas.config(scrollregion=canvas.bbox("all"))
+    canvas.bind("<Configure>", lambda event, canvas=canvas: canvas.configure(scrollregion=canvas.bbox("all")))
 
     # Start the GUI event loop for this window
     pairings_window.mainloop()
+
 
 
 # Dummy input
